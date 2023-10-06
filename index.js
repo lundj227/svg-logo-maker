@@ -35,7 +35,7 @@ function writeSVG(){
                 message: 'What color would you like the shape to be? (Enter a keyword or hexadecimal number)',
                 name: 'shapeColor'
             }
-        ]).then((response) => fs.appendFile('./examples/logo.svg', (response) =>{
+        ]).then((response) =>{
             var svg;
             if(response.logoShape === 'Circle'){
                 svg = new Circle();
@@ -48,10 +48,11 @@ function writeSVG(){
             svg.createTextColor(response.textColor);
             svg.createLogoShape(response.logoShape);
             svg.createShapeColor(response.shapeColor);
-            svg.makeShape();
-        }, (err) => {
-            if(err) throw err;
-            console.log('Your new SVG Logo has been created!')
-        }));
-    }
+            var finalSVG = svg.makeShape();
+            fs.appendFile('./examples/logo.svg', finalSVG, (err) => {
+                if(err) throw err;
+                console.log('Your new SVG Logo has been created!');
+            });
+        });   
+    };
 writeSVG();
