@@ -1,6 +1,6 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
-const generateLogo = require('./lib/shapes.js')
+const { Circle, Triangle, Square } = require('./lib/shapes.js');
 
 function writeSVG(){
     inquirer
@@ -35,7 +35,21 @@ function writeSVG(){
                 message: 'What color would you like the shape to be? (Enter a keyword or hexadecimal number)',
                 name: 'shapeColor'
             }
-        ]).then((response) => fs.appendFile('./examples/logo.svg', generateLogo(response), (err) => {
+        ]).then((response) => fs.appendFile('./examples/logo.svg', (response) =>{
+            var svg;
+            if(response.logoShape === 'Circle'){
+                svg = new Circle();
+            }else if (response.logoShape === 'Triangle'){
+                svg = new Triangle();
+            }else if (response.logoShape === 'Square'){
+                svg =  new Square();
+            }
+            svg.createLogoChars(response.logoChars);
+            svg.createTextColor(response.textColor);
+            svg.createLogoShape(response.logoShape);
+            svg.createShapeColor(response.shapeColor);
+            svg.makeShape();
+        }, (err) => {
             if(err) throw err;
             console.log('Your new SVG Logo has been created!')
         }));
